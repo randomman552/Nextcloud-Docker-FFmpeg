@@ -13,5 +13,5 @@ jobs:
       - name: Fetch tags from upstream image
         run: |
           TAGS=$(curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq --arg variant "$VARIANT" --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith($variant)) | select(startswith($prefixes[]))')
+            | jq -c --arg variant "$VARIANT" --argjson prefixes "$PREFIXES" -r '[.results[].name | select(endswith($variant)) | select(startswith($prefixes[]))]')
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
