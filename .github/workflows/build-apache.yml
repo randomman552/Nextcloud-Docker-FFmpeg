@@ -26,6 +26,7 @@ jobs:
   build:
     needs: get-tags
     runs-on: ubuntu-latest
+    name: build (${{ matrix.tags[0] }})
     permissions:
       contents: read
       packages: write
