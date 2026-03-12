@@ -2,6 +2,8 @@ name: List upstream tags
 
 on:
   workflow_dispatch:
+env:
+  PREFIXES: '["stable"]'
 
 jobs:
   get-tags:
@@ -10,14 +12,14 @@ jobs:
       - name: Fetch apache tags from upstream image
         run: |
           curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq -r '.results[].name | select(endswith("apache"))'
+            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith("apache")) | select(startswith($prefixes[]))'
 
       - name: Fetch fpm tags from upstream image
         run: |
           curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq -r '.results[].name | select(endswith("fpm"))'
+            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith("fpm")) | select(startswith($prefixes[]))'
 
       - name: Fetch fpm-alpine tags from upstream image
         run: |
           curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq -r '.results[].name | select(endswith("fpm-alpine"))'
+            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith("fpm-alpine")) | select(startswith($prefixes[]))'
