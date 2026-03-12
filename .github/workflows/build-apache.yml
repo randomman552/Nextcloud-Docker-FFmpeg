@@ -8,6 +8,8 @@ on:
 env:
   VARIANT: 'apache'
   PREFIXES: '["stable"]'
+  REGISTRY: 'ghcr.io'
+  REPOSITORY: ${{ github.repository }}
 
 jobs:
   get-tags:
@@ -20,7 +22,7 @@ jobs:
       - name: Fetch tags from upstream image
         id: fetch
         run: |
-          TAGS=$(python .github/scripts/fetch_tags.py "$VARIANT" "$PREFIXES")
+          TAGS=$(python .github/scripts/fetch_tags.py)
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
 
   build:
@@ -55,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ join(matrix.tags, format('\nghcr.io/{0}:', github.repository)) }}
+          tags: ${{ join(matrix.image_tags, ',') }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BASE_TAG=${{ matrix.tags[0] }}
