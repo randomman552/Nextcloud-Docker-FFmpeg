@@ -1,0 +1,59 @@
+name: Build fpm-alpine
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  schedule:
+    - cron: '0 0 * * *'
+
+env:
+  VARIANT: 'fpm-alpine'
+  PREFIXES: '["stable"]'
+
+jobs:
+  get-tags:
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.fetch.outputs.tags }}
+    steps:
+      - name: Fetch tags from upstream image
+        id: fetch
+        run: |
+          TAGS=$(curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
+            | jq -c --arg variant "$VARIANT" --argjson prefixes "$PREFIXES" -r '[.results[].name | select(endswith($variant)) | select(startswith($prefixes[]))]')
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+
+  build:
+    needs: get-tags
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        tag: ${{ fromJson(needs.get-tags.outputs.tags) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ matrix.tag }}
+  
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
