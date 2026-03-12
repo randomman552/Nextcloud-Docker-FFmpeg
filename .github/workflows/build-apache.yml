@@ -1,4 +1,4 @@
-name: Build fpm
+name: Build apache
 
 on:
   workflow_dispatch:

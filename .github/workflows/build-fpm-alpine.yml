@@ -1,4 +1,4 @@
-name: Build fpm
+name: Build fpm-alpine
 
 on:
   workflow_dispatch:
