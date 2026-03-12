@@ -18,7 +18,7 @@ jobs:
     outputs:
       tags: ${{ steps.fetch.outputs.tags }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Fetch tags from upstream image
         id: fetch
@@ -37,7 +37,7 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.get-tags.outputs.tags) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Log in to registry
         uses: docker/login-action@v3
