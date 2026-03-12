@@ -15,11 +15,12 @@ jobs:
     outputs:
       tags: ${{ steps.fetch.outputs.tags }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Fetch tags from upstream image
         id: fetch
         run: |
-          TAGS=$(curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq -c --arg variant "$VARIANT" --argjson prefixes "$PREFIXES" -r '[.results[].name | select(endswith($variant)) | select(startswith($prefixes[]))]')
+          TAGS=$(python .github/scripts/fetch_tags.py "$VARIANT" "$PREFIXES")
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
 
   build:
@@ -30,7 +31,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        tag: ${{ fromJson(needs.get-tags.outputs.tags) }}
+        include: ${{ fromJson(needs.get-tags.outputs.tags) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,5 +54,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ join(matrix.tags, format('\nghcr.io/{0}:', github.repository)) }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BASE_TAG=${{ matrix.tags[0] }}
