@@ -1,12 +1,10 @@
 # Nextcloud With FFmpeg
-[![Build Status](https://drone.ggrainger.uk/api/badges/randomman552/Nextcloud-Docker-FFmpeg/status.svg)](https://drone.ggrainger.uk/randomman552/Nextcloud-Docker-FFmpeg)
-
 The Docker images created by nextcloud do not include FFmpeg which is required for video previews and some nextcloud apps.
 
 The image hosted with this repository extends the nextcloud images with an ffmpeg installation.
 
 ## Using this image
-To use this image, simply use the `randomman552/nextcloud-ffmpeg` instead of `nextcloud`. This currently supports stable tags, but not tags for specific versions.
+To use this image, simply use the `ghcr.io/randomman552/nextcloud-docker-ffmpeg` instead of `nextcloud`.
 
 For example, view the below `compose.yml` adapted from the [nextcloud image on Docker Hub](https://hub.docker.com/_/nextcloud/):
 
@@ -31,7 +29,7 @@ services:
       - MYSQL_USER=nextcloud
 
   app:
-    image: randomman552/nextcloud
+    image: ghcr.io/randomman552/nextcloud-docker-ffmpeg
     restart: always
     ports:
       - 8080:80
@@ -45,8 +43,3 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
 ```
-
-## Avaiable Tags
-- latest, stable, apache, stable-apache
-- fpm, stable-fpm
-- fpm-alpine, stable-fpm-alpine
