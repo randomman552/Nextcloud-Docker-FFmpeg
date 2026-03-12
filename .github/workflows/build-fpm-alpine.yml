@@ -10,6 +10,7 @@ env:
   PREFIXES: '["stable"]'
   REGISTRY: 'ghcr.io'
   REPOSITORY: ${{ github.repository }}
+  FILE: Dockerfile.fpm-alpine
 
 jobs:
   get-tags:
@@ -57,5 +58,6 @@ jobs:
           push: true
           tags: ${{ join(matrix.image_tags, ',') }}
           labels: ${{ steps.meta.outputs.labels }}
+          file: $FILE
           build-args: |
             BASE_TAG=${{ matrix.tags[0] }}
