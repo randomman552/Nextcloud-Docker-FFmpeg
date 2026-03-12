@@ -1,4 +1,5 @@
-FROM nextcloud:stable-fpm-alpine
+ARG BASE_TAG=stable-fpm-alpine
+FROM nextcloud:${BASE_TAG}
 
 RUN apk update && \
     apk add ffmpeg
