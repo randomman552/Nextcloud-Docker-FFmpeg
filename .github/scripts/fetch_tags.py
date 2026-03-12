@@ -28,7 +28,7 @@ def fetch_tags(variant: str, prefixes: list[str], registry: str, repository: str
                 "image_tags": [],
             }
         by_digest[digest]["tags"].append(result["name"])
-        by_digest[digest]["image_tags"].append(f"{registry}/{repository}:{result['name']}")
+        by_digest[digest]["image_tags"].append(f"{registry}/{repository.lower()}:{result['name']}")
 
     return list(by_digest.values())
 
