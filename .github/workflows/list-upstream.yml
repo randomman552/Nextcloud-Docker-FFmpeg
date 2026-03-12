@@ -3,22 +3,17 @@ name: List upstream tags
 on:
   workflow_dispatch:
 env:
+  VARIANT: apache
   PREFIXES: '["stable", "31", "32", "33"]'
+  REGISTRY: 'ghcr.io'
+  REPOSITORY: ${{ github.repository }}
 
 jobs:
   get-tags:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Fetch apache tags from upstream image
         run: |
-          python .github/scripts/fetch_tags.py "apache" "$PREFIXES"
-
-      - name: Fetch fpm tags from upstream image
-        run: |
-          python .github/scripts/fetch_tags.py "fpm" "$PREFIXES"
-
-      - name: Fetch fpm-alpine tags from upstream image
-        run: |
-          python .github/scripts/fetch_tags.py "fpm-alpine" "$PREFIXES"
+          python .github/scripts/fetch_tags.py
