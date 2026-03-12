@@ -3,7 +3,7 @@ name: List upstream tags
 on:
   workflow_dispatch:
 env:
-  PREFIXES: '["stable"]'
+  PREFIXES: '["stable", "31", "32", "33"]'
 
 jobs:
   get-tags:
