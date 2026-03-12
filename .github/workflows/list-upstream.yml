@@ -12,7 +12,7 @@ on:
           - fpm
           - fpm-alpine
 env:
-  VARIANT: apache
+  VARIANT: ${{ github.event.inputs.variant }}
   PREFIXES: '["stable", "31", "32", "33"]'
   REGISTRY: 'ghcr.io'
   REPOSITORY: ${{ github.repository }}
