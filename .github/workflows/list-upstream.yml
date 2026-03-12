@@ -7,7 +7,17 @@ jobs:
   get-tags:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch tags from upstream image
+      - name: Fetch apache tags from upstream image
         run: |
           curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq -r '.results[].name'
+            | jq -r '.results[].name | select(endswith("apache"))'
+
+      - name: Fetch fpm tags from upstream image
+        run: |
+          curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
+            | jq -r '.results[].name | select(endswith("fpm"))'
+
+      - name: Fetch fpm-alpine tags from upstream image
+        run: |
+          curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
+            | jq -r '.results[].name | select(endswith("fpm-alpine"))'
