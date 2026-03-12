@@ -1,0 +1,17 @@
+name: List upstream tags
+
+on:
+  workflow_dispatch:
+env:
+  VARIANT: 'apache'
+  PREFIXES: '["stable", "31", "32", "33"]'
+
+jobs:
+  get-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch tags from upstream image
+        run: |
+          TAGS=$(curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
+            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith($VARIANT)) | select(startswith($prefixes[]))')
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
