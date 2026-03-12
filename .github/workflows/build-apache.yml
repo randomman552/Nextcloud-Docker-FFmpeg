@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ matrix.tag }}
+          tags: ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:${{ matrix.tag }}
           build-args: |
             BASE_TAG=${{ matrix.tag }}
