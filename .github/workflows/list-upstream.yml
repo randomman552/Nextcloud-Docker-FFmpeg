@@ -11,15 +11,12 @@ jobs:
     steps:
       - name: Fetch apache tags from upstream image
         run: |
-          curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith("apache")) | select(startswith($prefixes[]))'
+          python .github/scripts/fetch_tags.py "apache" "$PREFIXES"
 
       - name: Fetch fpm tags from upstream image
         run: |
-          curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith("fpm")) | select(startswith($prefixes[]))'
+          python .github/scripts/fetch_tags.py "fpm" "$PREFIXES"
 
       - name: Fetch fpm-alpine tags from upstream image
         run: |
-          curl -s "https://hub.docker.com/v2/repositories/library/nextcloud/tags/?page_size=100" \
-            | jq --argjson prefixes "$PREFIXES" -r '.results[].name | select(endswith("fpm-alpine")) | select(startswith($prefixes[]))'
+          python .github/scripts/fetch_tags.py "fpm-alpine" "$PREFIXES"
