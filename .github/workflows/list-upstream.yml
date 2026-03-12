@@ -2,6 +2,15 @@ name: List upstream tags
 
 on:
   workflow_dispatch:
+    inputs:
+      variant:
+        required: true
+        default: apache
+        type: choice
+        options:
+          - apache
+          - fpm
+          - fpm-alpine
 env:
   VARIANT: apache
   PREFIXES: '["stable", "31", "32", "33"]'
