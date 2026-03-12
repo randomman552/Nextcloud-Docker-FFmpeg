@@ -36,9 +36,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:${{ matrix.tag }}
+          tags: ghcr.io/${{ github.repository }}:${{ matrix.tag }}
           build-args: |
             BASE_TAG=${{ matrix.tag }}
