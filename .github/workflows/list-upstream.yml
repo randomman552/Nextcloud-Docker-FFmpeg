@@ -23,6 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch apache tags from upstream image
+      - name: Fetch ${{ env.VARIANT }} tags from upstream image
         run: |
           python .github/scripts/fetch_tags.py
